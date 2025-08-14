@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Dashboard: Project Azaadi SRS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Warm Neutral Harmony -->
+    <!-- Application Structure Plan: The application is structured as a single-page dashboard with a clear vertical flow. It starts with a high-level project overview, followed by interactive sections for key components: Project Scope, System Architecture (Compiler & VM), and a Financial Breakdown. This thematic structure is more intuitive for exploration than a linear document, allowing users to dive into specific areas of interest. Navigation is handled by scrolling and interactive tabs within sections, making it easy to digest complex information in manageable chunks. The goal is to guide the user from the "what" and "why" of the project to the "how" and "how much" in a logical, engaging manner. -->
+    <!-- Visualization & Content Choices: 
+        - Project Scope (In/Out): Goal: Inform. Method: Two-column layout with clear icons (HTML/Unicode). Interaction: Static display for clarity. Justification: Quickly communicates boundaries.
+        - Financial Breakdown: Goal: Compare. Method: Donut Chart (Chart.js). Interaction: Hovering over segments reveals cost details. Justification: Provides an immediate visual sense of cost distribution, which is more impactful than a simple list.
+        - System Architecture: Goal: Organize/Explain. Method: Interactive tabbed component for Compiler and VM. Inside, flow diagrams are built with HTML/Tailwind. Interaction: Clicking tabs switches content. Clicking diagram steps highlights them and shows details. Justification: Breaks down the complex technical workflow into two main parts, preventing information overload. The interactive diagram encourages exploration of the process steps.
+        - Requirements: Goal: Inform/Organize. Method: Accordion-style collapsible sections (HTML/JS). Interaction: Clicking a requirement type reveals details. Justification: Condenses a long list of requirements into a clean, manageable interface.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8; /* Warm off-white */
+            color: #4A4A4A;
+        }
+        .tab-active {
+            background-color: #A67B5B; /* Muted brown */
+            color: #FFFFFF;
+        }
+        .tab-inactive {
+            background-color: #EFEAE6; /* Lighter neutral */
+            color: #A67B5B;
+        }
+        .diagram-step {
+            transition: all 0.3s ease-in-out;
+            border-width: 2px;
+        }
+        .diagram-step-active {
+            transform: translateY(-5px) scale(1.03);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border-color: #A67B5B;
+        }
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
+        }
+        .accordion-open .accordion-content {
+            max-height: 500px; 
+        }
+        .accordion-open .accordion-arrow {
+            transform: rotate(180deg);
+        }
+        .accordion-arrow {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- Header -->
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-[#A67B5B] mb-2">Project Azaadi</h1>
+            <p class="text-lg text-gray-600">An Interactive Software Requirements Specification</p>
+        </header>
+
+        <!-- Main Content Grid -->
+        <main class="space-y-12">
+
+            <!-- Project Overview Section -->
+            <section id="overview" class="bg-white p-8 rounded-2xl shadow-lg">
+                <h2 class="text-3xl font-bold text-[#A67B5B] mb-4">1. Project Overview</h2>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    This dashboard provides an interactive overview of the Software Requirements Specification (SRS) for Project Azaadi. The project's primary goal is to achieve true platform independence for the C programming language. We will accomplish this by developing a custom compiler to translate C code into a proprietary, platform-agnostic bytecode, and a custom virtual machine (VM) to execute that bytecode on any supported operating system. This approach, inspired by the Java ecosystem, will allow developers to "write once, run anywhere."
+                </p>
+
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- In Scope -->
+                    <div class="bg-[#EFEAE6] p-6 rounded-xl">
+                        <h3 class="text-2xl font-semibold text-[#A67B5B] mb-4 flex items-center">
+                            <span class="text-3xl mr-3">✅</span> In Scope
+                        </h3>
+                        <ul class="space-y-3 text-gray-800">
+                            <li class="flex items-start"><span class="font-bold text-[#A67B5B] mr-2 mt-1">&#10142;</span><div><strong>Custom C Compiler:</strong> Translate C source code to proprietary bytecode.</div></li>
+                            <li class="flex items-start"><span class="font-bold text-[#A67B5B] mr-2 mt-1">&#10142;</span><div><strong>Custom Virtual Machine:</strong> Interpret and execute the bytecode.</div></li>
+                            <li class="flex items-start"><span class="font-bold text-[#A67B5B] mr-2 mt-1">&#10142;</span><div><strong>Cross-Platform Support:</strong> Ensure the VM runs on Windows, macOS, and Linux.</div></li>
+                        </ul>
+                    </div>
+                    <!-- Out of Scope -->
+                    <div class="bg-[#EFEAE6] p-6 rounded-xl">
+                        <h3 class="text-2xl font-semibold text-[#A67B5B] mb-4 flex items-center">
+                            <span class="text-3xl mr-3">❌</span> Out of Scope
+                        </h3>
+                        <ul class="space-y-3 text-gray-800">
+                            <li class="flex items-start"><span class="font-bold text-[#A67B5B] mr-2 mt-1">&#10142;</span><div><strong>Compiler Extensions:</strong> No support for non-standard GCC/MSVC extensions.</div></li>
+                            <li class="flex items-start"><span class="font-bold text-[#A67B5B] mr-2 mt-1">&#10142;</span><div><strong>Integrated Development Environment (IDE):</strong> The system will be CLI-based.</div></li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            
+            <!-- System Architecture Section -->
+            <section id="architecture" class="bg-white p-8 rounded-2xl shadow-lg">
+                <h2 class="text-3xl font-bold text-[#A67B5B] mb-4">2. System Architecture</h2>
+                <p class="text-gray-700 leading-relaxed mb-6">
+                    The Azaadi ecosystem is composed of two core components: the Compiler and the Virtual Machine (VM). The Compiler handles the translation of human-readable C code into machine-executable bytecode, while the VM provides the runtime environment to execute this bytecode. Explore the tabs below to understand the internal workflow of each component. Click on any step in the diagrams to see more details.
+                </p>
+
+                <!-- Tabs -->
+                <div class="flex border-b-2 border-gray-200 mb-6">
+                    <button id="tab-compiler" class="tab-btn tab-active py-2 px-6 font-semibold rounded-t-lg focus:outline-none">Compiler</button>
+                    <button id="tab-vm" class="tab-btn tab-inactive py-2 px-6 font-semibold rounded-t-lg focus:outline-none">Virtual Machine</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="tab-content-compiler">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-semibold text-gray-800">Compiler Workflow</h3>
+                        <p class="text-gray-600">From C Source to Azaadi Bytecode</p>
+                    </div>
+                    <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
+                        <div id="step-lexer" class="diagram-step bg-stone-100 p-4 rounded-lg shadow-md w-full md:w-64 text-center cursor-pointer border-2 border-transparent">
+                            <div class="text-4xl mb-2">📜</div>
+                            <h4 class="font-bold text-lg">Lexical Analyzer</h4>
+                        </div>
+                        <div class="text-2xl font-bold text-stone-400 transform md:rotate-0 rotate-90">&rarr;</div>
+                        <div id="step-parser" class="diagram-step bg-stone-100 p-4 rounded-lg shadow-md w-full md:w-64 text-center cursor-pointer border-2 border-transparent">
+                            <div class="text-4xl mb-2">🌳</div>
+                            <h4 class="font-bold text-lg">Parser</h4>
+                        </div>
+                        <div class="text-2xl font-bold text-stone-400 transform md:rotate-0 rotate-90">&rarr;</div>
+                        <div id="step-generator" class="diagram-step bg-stone-100 p-4 rounded-lg shadow-md w-full md:w-64 text-center cursor-pointer border-2 border-transparent">
+                            <div class="text-4xl mb-2">⚙️</div>
+                            <h4 class="font-bold text-lg">Code Generator</h4>
+                        </div>
+                    </div>
+                    <div id="diagram-details" class="bg-stone-50 p-6 rounded-lg min-h-[120px] text-center flex items-center justify-center">
+                        <p class="text-gray-600">Click a step above to see details.</p>
+                    </div>
+                </div>
+
+                <div id="tab-content-vm" class="hidden">
+                    <div class="text-center mb-6">
+                        <h3 class="text-2xl font-semibold text-gray-800">Virtual Machine Execution Flow</h3>
+                         <p class="text-gray-600">Running the Bytecode</p>
+                    </div>
+                     <div class="flex flex-col md:flex-row items-center justify-center space-y-4 md:space-y-0 md:space-x-4 mb-6">
+                        <div id="step-loader" class="diagram-step bg-sky-100 p-4 rounded-lg shadow-md w-full md:w-64 text-center cursor-pointer border-2 border-transparent">
+                            <div class="text-4xl mb-2">📥</div>
+                            <h4 class="font-bold text-lg">Bytecode Loader</h4>
+                        </div>
+                        <div class="text-2xl font-bold text-sky-400 transform md:rotate-0 rotate-90">&rarr;</div>
+                        <div id="step-interpreter" class="diagram-step bg-sky-100 p-4 rounded-lg shadow-md w-full md:w-64 text-center cursor-pointer border-2 border-transparent">
+                            <div class="text-4xl mb-2">🔄</div>
+                            <h4 class="font-bold text-lg">Execution Engine</h4>
+                        </div>
+                        <div class="text-2xl font-bold text-sky-400 transform md:rotate-0 rotate-90">&rarr;</div>
+                        <div id="step-os" class="diagram-step bg-sky-100 p-4 rounded-lg shadow-md w-full md:w-64 text-center cursor-pointer border-2 border-transparent">
+                            <div class="text-4xl mb-2">💻</div>
+                            <h4 class="font-bold text-lg">OS Interface</h4>
+                        </div>
+                    </div>
+                    <div id="diagram-details-vm" class="bg-sky-50 p-6 rounded-lg min-h-[120px] text-center flex items-center justify-center">
+                        <p class="text-gray-600">Click a step above to see details.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Requirements & Financials Section -->
+            <section id="details" class="grid md:grid-cols-5 gap-8">
+                <!-- Requirements Accordion -->
+                <div class="md:col-span-3 bg-white p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-3xl font-bold text-[#A67B5B] mb-4">3. Key Requirements</h2>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        The project is guided by specific technical and hardware requirements. The following sections outline the necessary hardware to run the Azaadi VM and the operating systems we are committed to supporting. Click each category to expand and view the details.
+                    </p>
+                    <div class="space-y-4">
+                        <!-- Hardware Accordion Item -->
+                        <div class="accordion-item border border-gray-200 rounded-lg">
+                            <button class="accordion-header w-full flex justify-between items-center p-4 text-left text-xl font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 rounded-t-lg focus:outline-none">
+                                <span>Hardware Requirements</span>
+                                <span class="accordion-arrow text-2xl text-[#A67B5B]">&#9660;</span>
+                            </button>
+                            <div class="accordion-content bg-white p-4 rounded-b-lg">
+                                <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li><strong>CPU:</strong> Dual-core processor (@ >2GHz)</li>
+                                    <li><strong>RAM:</strong> 4 GB or greater</li>
+                                    <li><strong>Storage:</strong> 50 GB free space</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- OS Accordion Item -->
+                        <div class="accordion-item border border-gray-200 rounded-lg">
+                            <button class="accordion-header w-full flex justify-between items-center p-4 text-left text-xl font-semibold text-gray-800 bg-gray-50 hover:bg-gray-100 rounded-t-lg focus:outline-none">
+                                <span>Supported Operating Systems</span>
+                                <span class="accordion-arrow text-2xl text-[#A67B5B]">&#9660;</span>
+                            </button>
+                            <div class="accordion-content bg-white p-4 rounded-b-lg">
+                               <ul class="list-disc list-inside space-y-2 text-gray-700">
+                                    <li>Windows 10 and later</li>
+                                    <li>macOS 11 (Big Sur) and later</li>
+                                    <li>Linux (Ubuntu 20.04+, Fedora 34+)</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financials Chart -->
+                <div class="md:col-span-2 bg-white p-8 rounded-2xl shadow-lg">
+                    <h2 class="text-3xl font-bold text-[#A67B5B] mb-4">4. Financial Feasibility</h2>
+                    <p class="text-gray-700 leading-relaxed mb-6">
+                        The total estimated budget for Project Azaadi is **Rs. 8,00,000**. The chart below breaks down the cost distribution. Hover over a segment for details.
+                    </p>
+                    <div class="chart-container relative h-64 md:h-80 w-full max-w-sm mx-auto">
+                        <canvas id="financialChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <!-- Footer -->
+        <footer class="text-center mt-12 py-6 border-t border-gray-200">
+            <p class="text-gray-500">Project Azaadi SRS Dashboard | Version 1.0 | August 14, 2025</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Financial Chart ---
+            const ctx = document.getElementById('financialChart').getContext('2d');
+            const financialData = {
+                labels: ['Developer Cost', 'Maintenance', 'Hardware'],
+                datasets: [{
+                    label: 'Cost Distribution',
+                    data: [500000, 200000, 100000],
+                    backgroundColor: [
+                        '#A67B5B', // Muted Brown
+                        '#DABFAA', // Light Tan
+                        '#EFEAE6'  // Lighter Neutral
+                    ],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 3,
+                    hoverOffset: 4
+                }]
+            };
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: financialData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Inter',
+                                    size: 14
+                                }
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        label += new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', minimumFractionDigits: 0 }).format(context.parsed);
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+
+            // --- Architecture Tabs ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const compilerContent = document.getElementById('tab-content-compiler');
+            const vmContent = document.getElementById('tab-content-vm');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.replace('tab-active', 'tab-inactive'));
+                    tab.classList.replace('tab-inactive', 'tab-active');
+
+                    if (tab.id === 'tab-compiler') {
+                        compilerContent.classList.remove('hidden');
+                        vmContent.classList.add('hidden');
+                    } else {
+                        compilerContent.classList.add('hidden');
+                        vmContent.classList.remove('hidden');
+                    }
+                });
+            });
+
+            // --- Interactive Diagram Logic ---
+            const diagramDetails = {
+                'step-lexer': {
+                    title: 'Lexical Analyzer',
+                    description: 'Reads the C source code and breaks it down into a stream of tokens (e.g., keywords, identifiers, operators). This is the first step of translation.'
+                },
+                'step-parser': {
+                    title: 'Parser',
+                    description: 'Takes the token stream and builds an Abstract Syntax Tree (AST). This tree represents the grammatical structure of the code and is used to check for syntax errors.'
+                },
+                'step-generator': {
+                    title: 'Code Generator',
+                    description: 'Traverses the AST and translates it into the custom, platform-independent Azaadi bytecode. This bytecode is saved to a `.azadi` file.'
+                },
+                'step-loader': {
+                    title: 'Bytecode Loader',
+                    description: 'Reads the `.azadi` file into memory when the program is executed. It also performs verification to ensure the bytecode is valid and secure.'
+                },
+                'step-interpreter': {
+                    title: 'Execution Engine',
+                    description: 'The core of the VM. It reads bytecode instruction by instruction and executes the corresponding operations using a stack-based architecture.'
+                },
+                'step-os': {
+                    title: 'OS Interface',
+                    description: 'Manages communication with the host operating system for tasks like file I/O, console output, and memory allocation.'
+                }
+            };
+            
+            const compilerSteps = document.querySelectorAll('#tab-content-compiler .diagram-step');
+            const vmSteps = document.querySelectorAll('#tab-content-vm .diagram-step');
+            const detailsContainer = document.getElementById('diagram-details');
+            const detailsContainerVM = document.getElementById('diagram-details-vm');
+
+            function handleStepClick(steps, container) {
+                 steps.forEach(step => {
+                    step.addEventListener('click', () => {
+                        steps.forEach(s => s.classList.remove('diagram-step-active'));
+                        step.classList.add('diagram-step-active');
+                        
+                        const detail = diagramDetails[step.id];
+                        container.innerHTML = `
+                            <div class="p-2">
+                                <h5 class="font-bold text-lg text-gray-800 mb-1">${detail.title}</h5>
+                                <p class="text-gray-600">${detail.description}</p>
+                            </div>
+                        `;
+                    });
+                });
+            }
+
+            handleStepClick(compilerSteps, detailsContainer);
+            handleStepClick(vmSteps, detailsContainerVM);
+
+            // --- Accordion Logic ---
+            const accordionHeaders = document.querySelectorAll('.accordion-header');
+            accordionHeaders.forEach(header => {
+                header.addEventListener('click', () => {
+                    const accordionItem = header.parentElement;
+                    accordionItem.classList.toggle('accordion-open');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
