@@ -1,0 +1,34 @@
+#ifndef TOKEN_H
+#define TOKEN_H
+
+typedef enum {
+    // Keywords
+    TOKEN_INT, TOKEN_CHAR, TOKEN_FLOAT, TOKEN_DOUBLE, TOKEN_VOID,
+    TOKEN_IF, TOKEN_ELSE, TOKEN_WHILE, TOKEN_FOR, TOKEN_RETURN,
+    TOKEN_BREAK, TOKEN_CONTINUE,
+    
+    // Operators
+    TOKEN_PLUS, TOKEN_MINUS, TOKEN_STAR, TOKEN_SLASH, TOKEN_PERCENT,
+    TOKEN_ASSIGN, TOKEN_EQ, TOKEN_NE, TOKEN_LT, TOKEN_GT, TOKEN_LE, TOKEN_GE,
+    TOKEN_AND, TOKEN_OR, TOKEN_NOT,
+    TOKEN_AMPERSAND, TOKEN_PIPE, TOKEN_CARET, TOKEN_TILDE,
+    
+    // Delimiters
+    TOKEN_LPAREN, TOKEN_RPAREN, TOKEN_LBRACE, TOKEN_RBRACE,
+    TOKEN_LBRACKET, TOKEN_RBRACKET, TOKEN_SEMICOLON, TOKEN_COMMA,
+    
+    // Literals and Identifiers
+    TOKEN_IDENTIFIER, TOKEN_NUMBER, TOKEN_STRING,
+    
+    // Special
+    TOKEN_EOF, TOKEN_ERROR
+} TokenType;
+
+typedef struct {
+    TokenType type;
+    char *value;
+    int line;
+    int column;
+} Token;
+
+#endif

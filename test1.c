@@ -4,9 +4,9 @@
 int main() {
     int a = 1;
     int b = 2;
-    sum = a + b;
+  int   sum = a + b;
 
-    printf(sum);
+    printf("%d", sum);
 
     return 0;
 }
