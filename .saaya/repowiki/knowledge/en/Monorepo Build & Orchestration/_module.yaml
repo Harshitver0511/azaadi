@@ -1,0 +1,34 @@
+schema_version: 1
+title: "Monorepo Build & Orchestration"
+scope:
+  - "package.json"
+  - "turbo.json"
+  - "pnpm-workspace.yaml"
+description: >-
+  pnpm workspace configuration and Turborepo task orchestration for the azaadi
+  monorepo, covering dependency management, the build task graph, caching, and
+  root-level scripts.
+components:
+  - name: pnpm-workspace
+    file: pnpm-workspace.yaml
+    role: Declares workspace package globs (apps/*, packages/*).
+  - name: turbo-pipeline
+    file: turbo.json
+    role: Defines the task graph (build, dev, lint, test) with dependsOn, outputs, and caching.
+  - name: root-orchestrator
+    file: package.json
+    role: Root private package exposing aggregate scripts and shared devDependencies.
+tasks:
+  - build
+  - dev
+  - lint
+  - test
+  - typecheck
+package_manager: pnpm
+node_version: ">=18.18.0"
+cache:
+  local: .turbo/cache
+  remote:
+    enabled_by:
+      - TURBO_TOKEN
+      - TURBO_TEAM
