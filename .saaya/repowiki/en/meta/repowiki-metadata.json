@@ -1,0 +1,88 @@
+{
+  "knowledge_relations": [
+    {
+      "id": 1,
+      "source_id": "4028d6cd-b515-4a48-bb90-cc1cb9b22d47",
+      "target_id": "6fedbfb6-ecb0-4152-a67d-e89b72566e97",
+      "source_type": "WIKI_ITEM",
+      "target_type": "WIKI_ITEM",
+      "relationship_type": "PARENT_CHILD",
+      "extra": "{\"path\":\"en/content/Getting Started.md\"}"
+    },
+    {
+      "id": 2,
+      "source_id": "6fedbfb6-ecb0-4152-a67d-e89b72566e97",
+      "target_id": "4028d6cd-b515-4a48-bb90-cc1cb9b22d47",
+      "source_type": "WIKI_ITEM",
+      "target_type": "WIKI_ITEM",
+      "relationship_type": "PARENT_CHILD",
+      "extra": "{\"path\":\"en/content/Architecture Overview/System Architecture.md\"}"
+    }
+  ],
+  "wiki_catalogs": [
+    {
+      "id": "c09bc064-6c56-4f81-aeeb-fcf7224fca2b",
+      "repo_id": "8726cbc4-a734-4d13-bb5d-5a7863670d4e",
+      "name": "Getting Started",
+      "description": "getting-started",
+      "prompt": "Write getting started guide",
+      "progress_status": "completed",
+      "dependent_files": "README.md",
+      "gmt_create": "2026-11-18T17:20:32.543Z",
+      "gmt_modified": "2026-11-18T17:20:32.543Z"
+    },
+    {
+      "id": "75f65631-eb89-4a01-b476-4c7b5e0f6ee0",
+      "repo_id": "8726cbc4-a734-4d13-bb5d-5a7863670d4e",
+      "name": "Architecture Overview/System Architecture",
+      "description": "system-architecture",
+      "prompt": "Write system architecture guide",
+      "progress_status": "completed",
+      "dependent_files": "README.md",
+      "gmt_create": "2026-11-18T17:20:32.543Z",
+      "gmt_modified": "2026-11-18T17:20:32.543Z"
+    }
+  ],
+  "wiki_items": [
+    {
+      "catalog_id": "c09bc064-6c56-4f81-aeeb-fcf7224fca2b",
+      "title": "Getting Started",
+      "description": "",
+      "extend": "{}",
+      "progress_status": "completed",
+      "repo_id": "8726cbc4-a734-4d13-bb5d-5a7863670d4e",
+      "reference_count": 0,
+      "id": "4028d6cd-b515-4a48-bb90-cc1cb9b22d47",
+      "gmt_create": "2026-11-18T17:20:32.543Z",
+      "gmt_modified": "2026-11-18T17:20:32.543Z"
+    },
+    {
+      "catalog_id": "75f65631-eb89-4a01-b476-4c7b5e0f6ee0",
+      "title": "Architecture Overview/System Architecture",
+      "description": "",
+      "extend": "{}",
+      "progress_status": "completed",
+      "repo_id": "8726cbc4-a734-4d13-bb5d-5a7863670d4e",
+      "reference_count": 0,
+      "id": "6fedbfb6-ecb0-4152-a67d-e89b72566e97",
+      "gmt_create": "2026-11-18T17:20:32.543Z",
+      "gmt_modified": "2026-11-18T17:20:32.543Z"
+    }
+  ],
+  "wiki_overview": {
+    "content": "# azaadi\nAuto-generated enterprise knowledge base.",
+    "id": "c4aad079-c416-4f96-848c-cba4fb659f7f",
+    "repo_id": "8726cbc4-a734-4d13-bb5d-5a7863670d4e"
+  },
+  "wiki_readme": {
+    "content": "",
+    "id": "1d7468c6-92a3-42cc-9bd3-43d1e29f3c70",
+    "repo_id": "8726cbc4-a734-4d13-bb5d-5a7863670d4e"
+  },
+  "wiki_repo": {
+    "id": "8726cbc4-a734-4d13-bb5d-5a7863670d4e",
+    "name": "azaadi",
+    "progress_status": "completed",
+    "wiki_present_status": "COMPLETED"
+  }
+}

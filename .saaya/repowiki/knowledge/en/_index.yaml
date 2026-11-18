@@ -1,0 +1,15 @@
+schema_version: 1
+locale: en-US
+branch: main
+nodes_managed: true
+exported_at: "2026-11-18T17:20:32.543Z"
+modules:
+    "":
+        dir_name: azaadi
+        title: azaadi
+        scope:
+            - **
+        source_files: []
+        children: []
+        depends_on: []
+        related_to: []
